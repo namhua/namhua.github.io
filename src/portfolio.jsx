@@ -90,6 +90,8 @@ function App() {
       <AnomalyDetailSheet open={detailId === 4} onClose={() => setDetailId(null)} />
       <SQLDetailSheet open={detailId === 5} onClose={() => setDetailId(null)} />
 
+      <FloatingCTA />
+
       <TweaksPanel title="Tweaks">
         <TweakSection label="Palette" />
         <TweakRadio

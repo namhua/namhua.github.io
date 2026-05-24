@@ -80,8 +80,10 @@ const Ico = {
     </svg>
   ),
   Hamburger: () => (
-    <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M0 1h18M0 6h18M0 11h18" />
+    <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
+      <rect width="18" height="2" rx="1"/>
+      <rect y="5.5" width="18" height="2" rx="1"/>
+      <rect y="11" width="18" height="2" rx="1"/>
     </svg>
   ),
 };
@@ -510,24 +512,20 @@ function About() {
           <div className="about-prose reveal">
             <div className="section-label">About</div>
             <p>
-              I'm an Analytics Engineer at VNG · Zalopay — working in fintech,
-              with earlier chapters in business research and education.
-            </p>
-            <p>
-              I started in audit at PwC, learning to trace every number back to
-              its source. After a Data Analysis program at MindX, I joined VIRAC
-              as a Research Analyst, then Vtecs as a Data Analyst, building the
-              SQL fluency and habit of patience that analytics really needs.
+              Analytics Engineer at VNG · Zalopay — building pipelines,
+              dashboards, and forecasting models for a payment platform
+              used by millions. Started in audit at PwC, which means
+              I trace every number back to its source before I trust it.
             </p>
             <p className="pull">
               Good analytics is mostly good plumbing — and a clear point of view.
             </p>
             <p>
-              Today at Zalopay I work across the stack: SQL / Python / PySpark on
-              Airflow pipelines, BI dashboards for KPI monitoring, KPI forecasting
-              models, and a Matrix Profile–based anomaly detection system for
-              tickets, costs and product flows. I also mentor learners in Data
-              Science and Analytics at CoderSchool, and as a freelance instructor.
+              At Zalopay I work across the full stack: SQL · Python · PySpark
+              on Airflow, KPI dashboards, an end-of-month forecasting system,
+              and a Matrix Profile anomaly detector across tickets, costs, and
+              product funnels. On the side, I mentor Data Science & Analytics
+              at CoderSchool.
             </p>
           </div>
           <div className="about-highlights reveal">
@@ -1255,8 +1253,35 @@ function GADetailSheet({ open, onClose }) {
   );
 }
 
+function FloatingCTA() {
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const handleClick = () => {
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+  return (
+    <button
+      className={"floating-cta" + (visible ? " floating-cta--visible" : "")}
+      onClick={handleClick}
+      aria-label="Contact me"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 10.5c0 .4-.1.8-.3 1.1-.2.4-.5.7-.9.9-.4.2-.8.3-1.3.3-.7 0-1.4-.2-2-.5L7 14l.7-2.5c-.3-.6-.5-1.3-.5-2 0-.5.1-.9.3-1.3.2-.4.5-.7.9-.9.4-.2.8-.3 1.1-.3h.1c.9.1 1.7.5 2.3 1.1.6.6 1 1.4 1.1 2.3v.1z"/>
+        <path d="M2 4.5c0-.9.7-1.5 1.5-1.5h9c.8 0 1.5.7 1.5 1.5v4c0 .8-.7 1.5-1.5 1.5H10L7 12V10H3.5C2.7 10 2 9.3 2 8.5v-4z"/>
+      </svg>
+      <span>Contact me</span>
+    </button>
+  );
+}
+
 // expose to portfolio.jsx
 Object.assign(window, {
   Nav, Hero, About, Skills, Projects, Experience, Certifications, Contact, Footer,
-  Ico, SkillTag, GADetailSheet
+  Ico, SkillTag, GADetailSheet, FloatingCTA
 });
