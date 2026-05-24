@@ -126,24 +126,14 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     background: transparent;
-    cursor: default;
+    cursor: pointer;
     align-items: center;
     justify-content: center;
     transition: background .2s;
+    color: var(--ink);
   }
   .hamburger:hover { background: var(--surface); }
-  .hamburger-icon { width: 16px; height: 10px; position: relative; }
-  .hamburger-icon span {
-    position: absolute; left: 0; right: 0;
-    height: 1.5px; background: var(--ink);
-    transition: transform .25s, top .25s, opacity .15s;
-  }
-  .hamburger-icon span:nth-child(1) { top: 0; }
-  .hamburger-icon span:nth-child(2) { top: 4.5px; }
-  .hamburger-icon span:nth-child(3) { top: 9px; }
-  .nav.menu-open .hamburger-icon span:nth-child(1) { top: 4.5px; transform: rotate(45deg); }
-  .nav.menu-open .hamburger-icon span:nth-child(2) { opacity: 0; }
-  .nav.menu-open .hamburger-icon span:nth-child(3) { top: 4.5px; transform: rotate(-45deg); }
+  .hamburger svg { display: block; transition: transform .2s; }
 
   .mobile-menu {
     display: none;
@@ -417,12 +407,23 @@
     background: var(--surface);
     padding: 14px 16px 12px;
     text-align: left;
-    cursor: default;
+    cursor: pointer;
     transition: background .2s;
     position: relative;
+    overflow: hidden;
     font-family: var(--font-body);
     color: var(--ink);
   }
+  /* Auto-cycle progress bar at bottom of active KPI card */
+  .hd-kpi-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: var(--accent);
+    animation: hdKpiProgress linear forwards;
+  }
+  @keyframes hdKpiProgress { from { width: 0% } to { width: 100% } }
   .hd-kpi:hover { background: var(--surface-2); }
   .hd-kpi.active { background: var(--bg); }
   .hd-kpi.active::before {

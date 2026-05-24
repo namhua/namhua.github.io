@@ -79,6 +79,11 @@ const Ico = {
       <path d="M6.5 5.8l4 2.2-4 2.2V5.8z" fill="currentColor" stroke="none" />
     </svg>
   ),
+  Hamburger: () => (
+    <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M0 1h18M0 6h18M0 11h18" />
+    </svg>
+  ),
 };
 
 // ──────────────── SKILL TAG ICONS ────────────────
@@ -264,7 +269,7 @@ function Nav() {
         </div>
         <a href="assets/hua-dai-nam-cv.pdf" download className="nav-cta"><Ico.Download /> Download CV</a>
         <button className="hamburger" onClick={() => setOpen(o => !o)} aria-label="Menu" aria-expanded={open}>
-          <span className="hamburger-icon"><span></span><span></span><span></span></span>
+          {open ? <Ico.Close /> : <Ico.Hamburger />}
         </button>
       </div>
       <div className="mobile-menu">
@@ -297,6 +302,29 @@ function HeroDashboard() {
   const [activeId, setActiveId] = React.useState("vol");
   const [hover, setHover] = React.useState(null);
   const active = metrics.find(m => m.id === activeId);
+
+  // ── Auto-cycle: advance card every 3 s; pause 8 s on user interaction ──
+  const CYCLE_MS = 3000;
+  const [autoPaused, setAutoPaused] = React.useState(false);
+  const pauseTimer = React.useRef(null);
+  React.useEffect(() => {
+    if (autoPaused) return;
+    const id = setInterval(() => {
+      setActiveId(prev => {
+        const idx = metrics.findIndex(m => m.id === prev);
+        return metrics[(idx + 1) % metrics.length].id;
+      });
+    }, CYCLE_MS);
+    return () => clearInterval(id);
+  }, [autoPaused]);
+  React.useEffect(() => () => clearTimeout(pauseTimer.current), []);
+
+  const handleSelect = (id) => {
+    setActiveId(id);
+    setAutoPaused(true);
+    clearTimeout(pauseTimer.current);
+    pauseTimer.current = setTimeout(() => setAutoPaused(false), 8000);
+  };
 
   const days = ["May 07","May 08","May 09","May 10","May 11","May 12","May 13","May 14","May 15","May 16","May 17","May 18","May 19","May 20"];
 
@@ -351,7 +379,7 @@ function HeroDashboard() {
               role="tab"
               aria-selected={isActive}
               className={"hd-kpi" + (isActive ? " active" : "")}
-              onClick={() => setActiveId(m.id)}>
+              onClick={() => handleSelect(m.id)}>
               <div className="hd-kpi-name">{m.name}</div>
               <div className="hd-kpi-val">
                 {m.value}<span className="u">{m.unit}</span>
@@ -360,6 +388,9 @@ function HeroDashboard() {
                 {up ? "▲" : "▼"} {Math.abs(m.delta).toFixed(1)}%
                 <span className="vs">vs prev. month</span>
               </div>
+              {isActive && !autoPaused && (
+                <span key={activeId} className="hd-kpi-bar" style={{ animationDuration: `${CYCLE_MS}ms` }} />
+              )}
             </button>
           );
         })}
